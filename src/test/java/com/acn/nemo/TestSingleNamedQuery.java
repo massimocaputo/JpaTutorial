@@ -1,6 +1,6 @@
-package com.acn.silvia;
+package com.acn.nemo;
 
-import com.acn.silvia.model.Region;
+import com.acn.nemo.model.Region;
 import org.junit.Before;
 import org.junit.Test;
 

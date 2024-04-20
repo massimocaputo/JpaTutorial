@@ -1,4 +1,4 @@
-package com.acn.silvia.service;
+package com.acn.nemo.service;
 
 public interface RegionService {
 }

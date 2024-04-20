@@ -4,15 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.acn.silvia</groupId>
-    <artifactId>JpaTutorials</artifactId>
+    <groupId>com.acn.nemo</groupId>
+    <artifactId>JpaTutorial</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>JpaTutorial Project</name>
+    <description>A simple Maven project with JPA and Hibernate</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hibernate.version>5.5.7.Final</hibernate.version>
+        <oracle.version>19.3.0.0</oracle.version>
+        <junit.version>4.13.2</junit.version>
     </properties>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package com.acn.silvia.model;
+package com.acn.nemo.model;
 
 import lombok.*;
 
