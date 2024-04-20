@@ -1,0 +1,33 @@
+
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+<persistence-unit name="myPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <!--shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode-->
+    <!--validation-mode>CALLBACK</validation-mode-->
+
+    <properties>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+        <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
+        <property name="hibernate.connection.url" value="jdbc:oracle:thin:/@nemo_high?TNS_ADMIN=C:\\MyLibs\\Oracle\\Wallet_NEMO" />
+        <property name="hibernate.connection.username" value="HR"/>
+        <property name="hibernate.connection.password" value="Accenture01!"/>
+        <property name="hibernate.connection.pool_size" value="5"/>
+        <property name="hibernate.connection.autocommit" value="false"/>
+
+        <property name="hibernate.show_sql" value="true" />
+        <property name="hibernate.format_sql" value="true" />
+        <property name="hibernate.generate_statistics" value="true"/>
+
+        <property name="javax.persistence.lock.timeout" value="100"/>
+        <property name="javax.persistence.query.timeout" value="100"/>
+        <!--property name="hibernate.cache.use_second_level_cache" value="true"/-->
+
+    </properties>
+</persistence-unit>
+
+</persistence>
