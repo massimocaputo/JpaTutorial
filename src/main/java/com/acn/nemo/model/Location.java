@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "Locations")
+@Table(name = "LOCATIONS")
 @Getter
 @Setter
 @NoArgsConstructor
