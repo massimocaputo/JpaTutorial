@@ -5,7 +5,7 @@
              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
-<persistence-unit name="myPU" transaction-type="RESOURCE_LOCAL">
+<persistence-unit name="walletPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!--shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode-->
     <!--validation-mode>CALLBACK</validation-mode-->

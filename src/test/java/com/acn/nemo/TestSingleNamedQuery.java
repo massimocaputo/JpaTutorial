@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TestSingleNamedQuery {
     private static EntityManager entityManager;
-    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("myPU");
+    private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("walletPU");
 
     @Before
     public void setUp() {
