@@ -22,10 +22,10 @@ public class Location implements Serializable {
     private static final long serialVersionUID = -365136587891527300L;
 
     @Id
-    @Column(name = "LOCATION_ID", nullable = false, length = 4, precision = 0)
+    @Column(name = "LOCATION_ID", nullable = false, length = 4)
     private Integer locationId;
 
-    @Column(name = "STREET_ADDRESS", nullable = true, length = 40)
+    @Column(name = "STREET_ADDRESS", length = 40)
     private String streetAddress;
 
     @Column(name="POSTAL_CODE", length = 12)
