@@ -11,16 +11,31 @@ import javax.persistence.Query;
 import java.util.List;
 
 
+/**
+ * The type Employee test.
+ */
 public class EmployeeTest {
 
+    /**
+     * The constant ENTITY_MANAGER_FACTORY.
+     */
     private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("walletPU");
+    /**
+     * The Entity manager.
+     */
     private EntityManager entityManager;
 
+    /**
+     * Employee test.
+     */
     @Before
     public void EmployeeTest() {
         this.entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
     }
 
+    /**
+     * Test retrive all employees.
+     */
     @Test
     public void testRetriveAllEmployees(){
         try {
@@ -36,6 +51,18 @@ public class EmployeeTest {
         }finally {
             entityManager.close();
         }
+    }
 
+    /**
+     * Retrive employee by id.
+     */
+    @Test
+    public void retriveEmployeeById(){
+        Employee e = entityManager.find(Employee.class, 100);
+        if ( null != e){
+            System.out.println( "Employee: "+e.toString());
+        }else {
+            System.out.println( "Employee not found");
+        }
     }
 }
