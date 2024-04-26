@@ -1,34 +1,36 @@
 package com.acn.nemo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "COUNTRIES")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "COUNTRIES")
 public class Country implements Serializable {
-
-    private static final long serialVersionUID = 5273831708271715027L;
-
+    private static final long serialVersionUID = -1661850980753085102L;
     @Id
+    @Size(max = 2)
     @Column(name = "COUNTRY_ID", nullable = false, length = 2)
     private String countryId;
 
+    @Size(max = 40)
     @Column(name = "COUNTRY_NAME", length = 40)
     private String countryName;
 
-    //REGION_ID	NUMBER	Yes
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REGION_ID")
+    private Region region;
+
+    @OneToMany(mappedBy = "country")
+    private Set<Location> locations = new LinkedHashSet<>();
+
 }
-
-

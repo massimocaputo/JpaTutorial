@@ -3,53 +3,82 @@ package com.acn.nemo.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "EMPLOYEES")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Entity
+@Table(name = "EMPLOYEES")
 @NamedQueries(
         {
-                @NamedQuery(name = "Employee.findAll", query = "SELECT e from Employee e" )
+                @NamedQuery(name = "Employee.findAll" ,query = "SELECT  e from Employee e ")
         }
 )
-public class Employee implements Serializable{
-
-
-    private static final long serialVersionUID = -1297088571819376458L;
-
+public class Employee implements Serializable {
+    private static final long serialVersionUID = -7883799433391138533L;
     @Id
-    @Column(name="EMPLOYEE_ID", length = 6, nullable = false)
-    private Integer employeeId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMPLOYEES_id_gen")
+    @SequenceGenerator(name = "EMPLOYEES_id_gen", sequenceName = "EMPLOYEES_SEQ", allocationSize = 1)
+    @Column(name = "EMPLOYEE_ID", nullable = false)
+    private Integer id;
 
-    @Column(name = "FIRST_NAME", length = 20, nullable = true)
+    @Size(max = 20)
+    @Column(name = "FIRST_NAME", length = 20)
     private String firstName;
 
-    @Column(name = "LAST_NAME", length = 25, nullable = false)
+    @Size(max = 25)
+    @NotNull
+    @Column(name = "LAST_NAME", nullable = false, length = 25)
     private String lastName;
 
-    @Column(name = "EMAIL", length = 25, unique = true, nullable = false)
+    @Size(max = 25)
+    @NotNull
+    @Column(name = "EMAIL", nullable = false, length = 25)
     private String email;
 
-    @Column(name = "JOB_ID", length = 10, nullable = false)
-    private String jobId;
+    @Size(max = 20)
+    @Column(name = "PHONE_NUMBER", length = 20)
+    private String phoneNumber;
 
-    @Column(name = "SALARY", length = 8, precision = 2)
-    private Long phoneNumber;
+    @NotNull
+    @Column(name = "HIRE_DATE", nullable = false)
+    private LocalDate hireDate;
 
-    @Column(name = "COMMISSION_PCT", length = 2, precision = 2)
-    private Long commissionPct;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "JOB_ID", nullable = false)
+    private Job job;
 
-    @Column(name = "MANAGER_ID", length = 6, precision = 0)
-    private Long managerId;
+    @Column(name = "SALARY", precision = 8, scale = 2)
+    private BigDecimal salary;
 
-    @Column(name = "DEPARTMENT_ID", length = 4)
-    private Long departmentId;
+    @Column(name = "COMMISSION_PCT", precision = 2, scale = 2)
+    private BigDecimal commissionPct;
 
-    //HIRE_DATE	DATE	No
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MANAGER_ID")
+    private Employee manager;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DEPARTMENT_ID")
+    private Department department;
+
+    @OneToMany(mappedBy = "manager")
+    private Set<Department> departments = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "manager")
+    private Set<Employee> employees = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "employee")
+    private Set<JobHistory> jobHistories = new LinkedHashSet<>();
 
 }

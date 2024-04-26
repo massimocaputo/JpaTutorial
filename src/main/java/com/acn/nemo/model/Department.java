@@ -1,37 +1,46 @@
 package com.acn.nemo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "DEPARTMENTS")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "DEPARTMENTS")
+@ToString
 public class Department implements Serializable {
-
-    private static final long serialVersionUID = 7729171341854322713L;
-
+    private static final long serialVersionUID = 693452596071306403L;
     @Id
-    @Column(name = "DEPARTMENT_ID", length = 4)
-    private Long departmentId;
+    @SequenceGenerator(name = "DEPARTMENTS_id_gen", sequenceName = "DEPARTMENTS_SEQ", allocationSize = 10)
+    @Column(name = "DEPARTMENT_ID", nullable = false)
+    private Short id;
 
-    @Column(name = "DEPARTMENT_NAME", length = 30)
+    @Size(max = 30)
+    @NotNull
+    @Column(name = "DEPARTMENT_NAME", nullable = false, length = 30)
     private String departmentName;
 
-    @Column(name = "MANAGER_ID", length = 6)
-    private Integer managerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MANAGER_ID")
+    private Employee manager;
 
-    @Column(name = "LOCATION_ID", length = 4)
-    private Integer locationId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LOCATION_ID")
+    private Location location;
+
+    @OneToMany(mappedBy = "department")
+    private Set<Employee> employees = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "department")
+    private Set<JobHistory> jobHistories = new LinkedHashSet<>();
 
 }

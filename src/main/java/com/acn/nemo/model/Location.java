@@ -1,41 +1,50 @@
 package com.acn.nemo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "LOCATIONS")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "LOCATIONS")
 public class Location implements Serializable {
-
-    private static final long serialVersionUID = -365136587891527300L;
-
+    private static final long serialVersionUID = -176889955310886284L;
     @Id
-    @Column(name = "LOCATION_ID", nullable = false, length = 4)
-    private Integer locationId;
+    @SequenceGenerator(name = "LOCATIONS_id_gen", sequenceName = "LOCATIONS_SEQ", allocationSize = 100)
+    @Column(name = "LOCATION_ID", nullable = false)
+    private Short id;
 
+    @Size(max = 40)
     @Column(name = "STREET_ADDRESS", length = 40)
     private String streetAddress;
 
-    @Column(name="POSTAL_CODE", length = 12)
+    @Size(max = 12)
+    @Column(name = "POSTAL_CODE", length = 12)
     private String postalCode;
 
-    @Column(name = "CITY", length = 30)
+    @Size(max = 30)
+    @NotNull
+    @Column(name = "CITY", nullable = false, length = 30)
     private String city;
 
+    @Size(max = 25)
     @Column(name = "STATE_PROVINCE", length = 25)
     private String stateProvince;
 
-    //COUNTRY_ID	CHAR(2 BYTE)	Yes
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_ID")
+    private Country country;
+
+    @OneToMany(mappedBy = "location")
+    private Set<Department> departments = new LinkedHashSet<>();
+
 }
