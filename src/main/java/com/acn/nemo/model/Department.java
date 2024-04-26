@@ -33,11 +33,11 @@ public class Department implements Serializable {
     @JoinColumn(name = "MANAGER_ID")
     private Employee manager;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "LOCATION_ID")
     private Location location;
 
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
     private Set<Employee> employees = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "department")

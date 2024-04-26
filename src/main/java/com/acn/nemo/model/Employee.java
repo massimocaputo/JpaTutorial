@@ -18,11 +18,15 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "EMPLOYEES")
-@NamedQueries(
-        {
-                @NamedQuery(name = "Employee.findAll" ,query = "SELECT  e from Employee e ")
-        }
-)
+@NamedQueries({
+        @NamedQuery(name = "Employee.findAll", query = "SELECT  e from Employee e "),
+        @NamedQuery(name = "Employee.findByIdEquals", query = "select e from Employee e where e.id = :id"),
+        @NamedQuery(name = "Employee.findByLastNameStartsWith", query = "select e from Employee e where e.lastName like concat(:lastName, '%')"),
+        @NamedQuery(name = "Employee.findByFirstNameStartsWithIgnoreCaseAndLastNameStartsWithIgnoreCase", query = "select e from Employee e where upper(e.firstName) like upper(concat(:firstName, '%')) and upper(e.lastName) like upper(concat(:lastName, '%'))"),
+        @NamedQuery(name = "Employee.findBySalaryGreaterThanEqualAndJob_JobIdEqualsIgnoreCase", query = "select e from Employee e where e.salary >= :salary and upper(e.job.jobId) = upper(:jobId)"),
+        @NamedQuery(name = "Employee.findByManager_IdNull", query = "select e from Employee e where e.manager.id is null"),
+        @NamedQuery(name = "Employee.findByDepartment_IdEquals", query = "select e from Employee e where e.department.id = :id")
+})
 public class Employee implements Serializable {
     private static final long serialVersionUID = -7883799433391138533L;
     @Id
@@ -68,7 +72,7 @@ public class Employee implements Serializable {
     @JoinColumn(name = "MANAGER_ID")
     private Employee manager;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "DEPARTMENT_ID")
     private Department department;
 

@@ -16,9 +16,15 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "LOCATIONS")
+@NamedQueries({
+        @NamedQuery(name = "Location.findAll", query = "select l from Location l")
+})
 public class Location implements Serializable {
+
     private static final long serialVersionUID = -176889955310886284L;
+
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LOCATIONS_id_gen")
     @SequenceGenerator(name = "LOCATIONS_id_gen", sequenceName = "LOCATIONS_SEQ", allocationSize = 100)
     @Column(name = "LOCATION_ID", nullable = false)
     private Short id;
@@ -44,7 +50,7 @@ public class Location implements Serializable {
     @JoinColumn(name = "COUNTRY_ID")
     private Country country;
 
-    @OneToMany(mappedBy = "location")
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Department> departments = new LinkedHashSet<>();
 
 }
