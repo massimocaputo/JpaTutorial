@@ -1,33 +1,36 @@
 package com.acn.nemo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-@Entity
-@Table(name = "REGIONS")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "REGIONS")
 @NamedQueries(
         {
-            @NamedQuery(name = "Region.findAll", query = "SELECT r FROM Region r"),
-            @NamedQuery(name = "Region.findById", query = "FROM Region r where r.regionId = :regionId")
+                @NamedQuery(name = "Region.findAll", query = "SELECT r from Region r")
         }
 )
-public class Region {
-
+public class Region implements Serializable {
+    private static final long serialVersionUID = 3828621064221232020L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "REGION_ID")
-    private Integer regionId;
+    @Column(name = "REGION_ID", nullable = false)
+    private Long id;
 
-    @Column(name = "REGION_NAME")
+    @Size(max = 25)
+    @Column(name = "REGION_NAME", length = 25)
     private String regionName;
 
+    @OneToMany(mappedBy = "region")
+    private Set<Country> countries = new LinkedHashSet<>();
 
 }
