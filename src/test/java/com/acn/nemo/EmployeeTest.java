@@ -37,7 +37,7 @@ public class EmployeeTest {
      * Employee test.
      */
     @Before
-    public void EmployeeTest() {
+    public void setUp()  {
         factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
         entityManager = factory.createEntityManager();
     }
@@ -50,16 +50,19 @@ public class EmployeeTest {
         try {
             log.info("Init testRetriveAllEmployees");
             query = entityManager.createNamedQuery("Employee.findAll");
-            log.info("Query: " + query.toString());
             List<Employee> employeesList = query.getResultList();
-            for (Employee employee : employeesList) {
-                log.info("Employee: " +
-                employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
-                " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
-                " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                " - City: " + employee.getDepartment().getLocation().getCity()
-                );
-         }
+            if(employeesList.isEmpty()){
+                log.info("Employee list is empty");
+            }else {
+                for (Employee employee : employeesList) {
+                    log.info("Employee: " +
+                            employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
+                            " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() +
+                            " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                            " - City: " + employee.getDepartment().getLocation().getCity()
+                    );
+                }
+            }
         }catch (Exception ex){
             log.error("Error: "+ ex.getMessage());
         }finally {
