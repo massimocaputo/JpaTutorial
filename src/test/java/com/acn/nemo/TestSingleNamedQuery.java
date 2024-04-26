@@ -22,7 +22,7 @@ public class TestSingleNamedQuery {
         try {
             Query query = entityManager.createNamedQuery("Region.findAll");
             List<Region> regions = query.getResultList();
-            regions.forEach(region -> System.out.println(region.getRegionId() + " " + region.getRegionName()));
+            regions.forEach(region -> System.out.println(region.getId() + " " + region.getRegionName()));
         }catch(NoResultException ex) {
             ex.printStackTrace();
         }finally {
@@ -38,7 +38,7 @@ public class TestSingleNamedQuery {
             Query query = entityManager.createNamedQuery("Region.findById");
             query.setParameter("regionId",Integer.valueOf(1));
             List<Region> regions = query.getResultList();
-            regions.forEach(region -> System.out.println(region.getRegionId() + " " + region.getRegionName()));
+            regions.forEach(region -> System.out.println(region.getId() + " " + region.getRegionName()));
         }catch(NoResultException ex) {
             ex.printStackTrace();
         }finally {

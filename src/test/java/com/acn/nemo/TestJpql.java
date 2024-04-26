@@ -24,7 +24,7 @@ public class TestJpql {
     public void getAllRegions() {
         try {
             List<Region> regions = entityManager.createQuery("select r from Region r", Region.class).getResultList();
-            regions.forEach(region -> System.out.println(region.getRegionId() + " " + region.getRegionName()));
+            regions.forEach(region -> System.out.println(region.getId() + " " + region.getRegionName()));
         }catch(NoResultException ex) {
             ex.printStackTrace();
         }
