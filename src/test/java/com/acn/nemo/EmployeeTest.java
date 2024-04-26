@@ -1,6 +1,5 @@
 package com.acn.nemo;
 
-import com.acn.nemo.model.Department;
 import com.acn.nemo.model.Employee;
 import com.acn.nemo.model.Job;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +30,7 @@ public class EmployeeTest {
     private EntityManager entityManager;
 
     private EntityTransaction transaction;
+    private Query query;
 
 
     /**
@@ -49,7 +49,7 @@ public class EmployeeTest {
     public void testRetriveAllEmployees(){
         try {
             log.info("Init testRetriveAllEmployees");
-            Query query = entityManager.createNamedQuery("Employee.findAll");
+            query = entityManager.createNamedQuery("Employee.findAll");
             log.info("Query: " + query.toString());
             List<Employee> employeesList = query.getResultList();
             for (Employee employee : employeesList) {
@@ -60,8 +60,8 @@ public class EmployeeTest {
                 " - City: " + employee.getDepartment().getLocation().getCity()
                 );
          }
-        }catch (IllegalArgumentException | IllegalStateException iex){
-            log.error("Error: "+ iex.getMessage());
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
         }finally {
             entityManager.close();
         }
@@ -72,18 +72,160 @@ public class EmployeeTest {
      */
     @Test
     public void retriveEmployeeById(){
-        Employee employee = entityManager.find(Employee.class, 100);
+        try{
+            log.info("Init testRetriveEmployeeById");
+            query = entityManager.createNamedQuery("Employee.findByIdEquals", Employee.class);
+            query.setParameter("id",100);
+            Employee employee = (Employee) query.getSingleResult();
 
-        if (Objects.nonNull(employee )){
-            log.info("Employee: " +
-                    employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
-                    " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
-                    " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                    " - City: " + employee.getDepartment().getLocation().getCity()
-            );
-        }else {
-            log.info( "Employee not found");
+            if (Objects.nonNull(employee )){
+                log.info("Employee: " +
+                        employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
+                        " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
+                        " - Job: "+ employee.getJob().getJobTitle()+
+                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                        " - City: " + employee.getDepartment().getLocation().getCity()
+                );
+            }else {
+                log.info( "Employee not found");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+
+        }finally {
+            entityManager.close();
         }
+        log.info("End testRetriveEmployeeById");
+    }
+
+    @Test
+    public void retriveEmployeeByLastNameStartsWith(){
+        try{
+            log.info("Init retriveEmployeeByLastNameStartsWith");
+            query = entityManager.createNamedQuery("Employee.findByLastNameStartsWith", Employee.class);
+            query.setParameter("lastName","G");
+            List<Employee> employeeList =  query.getResultList();
+            if(!employeeList.isEmpty()){
+                for (Employee employee : employeeList) {
+                    log.info("Employee: " +
+                            employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
+                            " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
+                            " - Job: "+ employee.getJob().getJobTitle()+
+                            " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                            " - City: " + employee.getDepartment().getLocation().getCity()
+                    );
+                }
+            }else {
+                log.info( "Employee List empty");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+        }finally {
+            entityManager.close();
+        }
+        log.info("End retriveEmployeeByLastNameStartsWith");
+    }
+
+    @Test
+    public void retriveEmployeeByLastNameAndFirstNameStartsWith(){
+        try{
+            log.info("Init retriveEmployeeByLastNameAndFirstNameStartsWith");
+            query = entityManager.createNamedQuery("Employee.findByFirstNameStartsWithIgnoreCaseAndLastNameStartsWithIgnoreCase", Employee.class);
+            query.setParameter("firstName","j");
+            query.setParameter("lastName","m");
+            List<Employee> employeeList =  query.getResultList();
+            if(!employeeList.isEmpty()){
+                employeeList.stream().map(employee -> "Employee: " +
+                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
+                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() +
+                        " - Job: " + employee.getJob().getJobTitle() +
+                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+            }else {
+                log.info( "Employee List empty");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+        }finally {
+            entityManager.close();
+        }
+        log.info("End retriveEmployeeByLastNameAndFirstNameStartsWith");
+    }
+
+    @Test
+    public void retriveEmployeeBySalaryAndJobId(){
+        try{
+            log.info("Init retriveEmployeeBySalaryAndJobId");
+            query = entityManager.createNamedQuery("Employee.findBySalaryGreaterThanEqualAndJob_JobIdEqualsIgnoreCase", Employee.class);
+            query.setParameter("salary",BigDecimal.valueOf(3500));
+            query.setParameter("jobId","sh_clerk");
+            List<Employee> employeeList =  query.getResultList();
+            if(!employeeList.isEmpty()){
+                employeeList.stream().map(employee -> "Employee: " +
+                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
+                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
+                        " - Job: " + employee.getJob().getJobTitle() +
+                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+            }else {
+                log.info( "Employee List empty");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+        }finally {
+            entityManager.close();
+        }
+        log.info("End retriveEmployeeBySalaryAndJobId");
+    }
+
+
+    @Test
+    public void retriveEmployeeByManagerNull(){
+        try{
+            log.info("Init retriveEmployeeByManagerNull");
+            query = entityManager.createNamedQuery("Employee.findByManager_IdNull", Employee.class);
+            List<Employee> employeeList =  query.getResultList();
+            if(!employeeList.isEmpty()){
+                employeeList.stream().map(employee -> "Employee: " +
+                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
+                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
+                        " - Job: " + employee.getJob().getJobTitle() +
+                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+            }else {
+                log.info( "Employee List empty");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+        }finally {
+            entityManager.close();
+        }
+        log.info("End retriveEmployeeByManagerNull");
+    }
+
+    @Test
+    public void retriveEmployeeByDepartmentEquals(){
+        try{
+            log.info("Init retriveEmployeeByDepartmentEquals");
+            query = entityManager.createNamedQuery("Employee.findByDepartment_IdEquals", Employee.class);
+            query.setParameter("id",Short.valueOf("100"));
+            List<Employee> employeeList =  query.getResultList();
+            if(!employeeList.isEmpty()){
+                employeeList.stream().map(employee -> "Employee: " +
+                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
+                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
+                        " - Job: " + employee.getJob().getJobTitle() +
+                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
+                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+            }else {
+                log.info( "Employee List empty");
+            }
+        }catch (Exception ex){
+            log.error("Error: "+ ex.getMessage());
+        }finally {
+            entityManager.close();
+        }
+        log.info("End retriveEmployeeByDepartmentEquals");
     }
 
     @Test
@@ -111,6 +253,8 @@ public class EmployeeTest {
             entityManager.close();
         }
     }
+
+
 
     @Test
     public void deleteEmployee(){
