@@ -6,7 +6,7 @@
     <option name="renamerInitialized" value="true" />
     <option name="reverseEngineeringLastDbConnectionId" value="a93b33ed-1055-4b00-a554-a022955a431b" />
   </component>
-  <component name="JpaPluginProjectSettings">
+  <component name="JpaPluginProjectSettings" repositoryEqualityConditionTypes="0, 2" dtoSerializableType="1">
     <option name="entityNameTemplate" />
     <option name="generateSerialVersionUID" value="true" />
     <option name="isLombokBuilder" value="true" />
