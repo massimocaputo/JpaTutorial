@@ -20,6 +20,7 @@ import java.util.Set;
 public class Department implements Serializable {
     private static final long serialVersionUID = 693452596071306403L;
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DEPARTMENTS_id_gen")
     @SequenceGenerator(name = "DEPARTMENTS_id_gen", sequenceName = "DEPARTMENTS_SEQ", allocationSize = 10)
     @Column(name = "DEPARTMENT_ID", nullable = false)
     private Short id;
