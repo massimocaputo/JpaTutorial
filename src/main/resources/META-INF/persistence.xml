@@ -13,7 +13,8 @@
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
         <property name="hibernate.connection.driver_class" value="oracle.jdbc.OracleDriver"/>
-        <property name="hibernate.connection.url" value="jdbc:oracle:thin:/@nemo_high?TNS_ADMIN=/Users/massimocaputo/MyLibs/Oracle/Wallet_NEMO" />
+        <!--property name="hibernate.connection.url" value="jdbc:oracle:thin:/@nemo_high?TNS_ADMIN=/Users/massimocaputo/MyLibs/Oracle/Wallet_NEMO" /-->
+        <property name="hibernate.connection.url" value="jdbc:oracle:thin:/@nemo_high?TNS_ADMIN=C:\\MyLibs\\Oracle\\Wallet_NEMO" />
         <property name="hibernate.connection.username" value="HR"/>
         <property name="hibernate.connection.password" value="Accenture01!"/>
         <property name="hibernate.connection.pool_size" value="5"/>
@@ -21,6 +22,7 @@
 
         <property name="hibernate.show_sql" value="true" />
         <property name="hibernate.format_sql" value="true" />
+        <property name="use_sql_comments" value="true" />
         <property name="hibernate.generate_statistics" value="false"/>
 
         <property name="javax.persistence.lock.timeout" value="100"/>
