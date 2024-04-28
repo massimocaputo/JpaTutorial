@@ -2,6 +2,7 @@ package com.acn.nemo;
 
 import com.acn.nemo.model.Employee;
 import com.acn.nemo.model.Job;
+import com.acn.nemo.model.Region;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -276,6 +277,20 @@ public class EmployeeTest {
         }catch (Exception e) {
             log.error("Error: " + e.getMessage());
         }finally {
+            entityManager.close();
+        }
+    }
+
+
+    @Test
+    public void getAllRegions() {
+        try {
+            List<Region> regions = entityManager.createQuery("select r from Region r", Region.class).getResultList();
+            regions.forEach(region -> System.out.println(region.getId() + " " + region.getRegionName()));
+        }catch(NoResultException ex) {
+            ex.printStackTrace();
+        }
+        finally {
             entityManager.close();
         }
     }
