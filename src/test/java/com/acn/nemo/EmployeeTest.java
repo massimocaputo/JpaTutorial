@@ -1,5 +1,7 @@
 package com.acn.nemo;
 
+import com.acn.nemo.dto.EmployeeDto;
+import com.acn.nemo.mapper.EmployeeMapper;
 import com.acn.nemo.model.Employee;
 import com.acn.nemo.model.Job;
 import com.acn.nemo.model.Region;
@@ -33,6 +35,7 @@ public class EmployeeTest {
     private EntityTransaction transaction;
     private Query query;
 
+    private EmployeeDto employeeDto;
 
     /**
      * Employee test.
@@ -56,11 +59,13 @@ public class EmployeeTest {
                 log.info("Employee list is empty");
             }else {
                 for (Employee employee : employeesList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
                     log.info("Employee: " +
-                            employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
-                            " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() +
-                            " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                            " - City: " + employee.getDepartment().getLocation().getCity()
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                            " - Job: " + employeeDto.getJob().getJobTitle() +
+                            " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                            " - City: " + employeeDto.getDepartment().getLocation().getCity()
                     );
                 }
             }
@@ -83,12 +88,13 @@ public class EmployeeTest {
             Employee employee = (Employee) query.getSingleResult();
 
             if (Objects.nonNull(employee )){
+                employeeDto = EmployeeMapper.MAPPER.toDto(employee);
                 log.info("Employee: " +
-                        employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
-                        " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
-                        " - Job: "+ employee.getJob().getJobTitle()+
-                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                        " - City: " + employee.getDepartment().getLocation().getCity()
+                        employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                        " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                        " - Job: " + employeeDto.getJob().getJobTitle() +
+                        " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                        " - City: " + employeeDto.getDepartment().getLocation().getCity()
                 );
             }else {
                 log.info( "Employee not found");
@@ -111,12 +117,13 @@ public class EmployeeTest {
             List<Employee> employeeList =  query.getResultList();
             if(!employeeList.isEmpty()){
                 for (Employee employee : employeeList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
                     log.info("Employee: " +
-                            employee.getId() + " - FirstName: " +employee.getFirstName() + " - LastName: " +employee.getLastName() +
-                            " - Email: "+ employee.getEmail() + " - PhoneNumber: "+ employee.getPhoneNumber() +
-                            " - Job: "+ employee.getJob().getJobTitle()+
-                            " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                            " - City: " + employee.getDepartment().getLocation().getCity()
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                            " - Job: " + employeeDto.getJob().getJobTitle() +
+                            " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                            " - City: " + employeeDto.getDepartment().getLocation().getCity()
                     );
                 }
             }else {
@@ -139,12 +146,16 @@ public class EmployeeTest {
             query.setParameter("lastName","m");
             List<Employee> employeeList =  query.getResultList();
             if(!employeeList.isEmpty()){
-                employeeList.stream().map(employee -> "Employee: " +
-                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
-                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() +
-                        " - Job: " + employee.getJob().getJobTitle() +
-                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+                for (Employee employee : employeeList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
+                    log.info("Employee: " +
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                            " - Job: " + employeeDto.getJob().getJobTitle() +
+                            " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                            " - City: " + employeeDto.getDepartment().getLocation().getCity()
+                    );
+                }
             }else {
                 log.info( "Employee List empty");
             }
@@ -165,12 +176,16 @@ public class EmployeeTest {
             query.setParameter("jobId","sh_clerk");
             List<Employee> employeeList =  query.getResultList();
             if(!employeeList.isEmpty()){
-                employeeList.stream().map(employee -> "Employee: " +
-                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
-                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
-                        " - Job: " + employee.getJob().getJobTitle() +
-                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+                for (Employee employee : employeeList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
+                    log.info("Employee: " +
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                            " - Job: " + employeeDto.getJob().getJobTitle() +
+                            " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                            " - City: " + employeeDto.getDepartment().getLocation().getCity()
+                    );
+                }
             }else {
                 log.info( "Employee List empty");
             }
@@ -190,12 +205,16 @@ public class EmployeeTest {
             query = entityManager.createNamedQuery("Employee.findByManager_IdNull", Employee.class);
             List<Employee> employeeList =  query.getResultList();
             if(!employeeList.isEmpty()){
-                employeeList.stream().map(employee -> "Employee: " +
-                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
-                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
-                        " - Job: " + employee.getJob().getJobTitle() +
-                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+                for (Employee employee : employeeList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
+                    log.info("Employee: " +
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" +employeeDto.getSalary() +
+                            " - Job: " + employeeDto.getJob().getJobTitle() +
+                            " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
+                            " - City: " + employeeDto.getDepartment().getLocation().getCity()
+                    );
+                }
             }else {
                 log.info( "Employee List empty");
             }
@@ -215,12 +234,18 @@ public class EmployeeTest {
             query.setParameter("id",Short.valueOf("100"));
             List<Employee> employeeList =  query.getResultList();
             if(!employeeList.isEmpty()){
-                employeeList.stream().map(employee -> "Employee: " +
-                        employee.getId() + " - FirstName: " + employee.getFirstName() + " - LastName: " + employee.getLastName() +
-                        " - Email: " + employee.getEmail() + " - PhoneNumber: " + employee.getPhoneNumber() + " - Salary:" +employee.getSalary() +
-                        " - Job: " + employee.getJob().getJobTitle() +
-                        " - Dept. Name: " + employee.getDepartment().getDepartmentName() +
-                        " - City: " + employee.getDepartment().getLocation().getCity()).forEach(log::info);
+
+                for (Employee employee : employeeList) {
+                    employeeDto = EmployeeMapper.MAPPER.toDto(employee);
+                    log.info("Employee: " +
+                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" +employeeDto.getSalary()
+                            +" - Job: " + employeeDto.getJob().getJobTitle()
+                            +" - Dept. Name: " + employeeDto.getDepartment().getDepartmentName()
+                            +" - City: " + employeeDto.getDepartment().getLocation().getCity()
+
+                    );
+                }
             }else {
                 log.info( "Employee List empty");
             }
@@ -234,13 +259,27 @@ public class EmployeeTest {
 
     @Test
     public void insertEmployee() {
-        Job job = new Job();
-        job.setJobTitle("FI_MGR");
+        log.info("Recupero Job per FI_MGR");
+        query = entityManager.createNamedQuery("Job.findByJobIdEqualsIgnoreCase", Job.class);
+        query.setParameter("jobId","FI_MGR");
+        Job job = (Job) query.getSingleResult();
 
-        Employee employee = Employee.builder().
-                phoneNumber("3471378114").email("massimocaputo@gmail.com").salary(BigDecimal.valueOf(12000))
-                .job(job).hireDate(LocalDate.of(2001, 04, 15))
-                .firstName("Massimo").lastName("Caputo").build();
+        log.info("Recupero Manager ID");
+        query = entityManager.createNamedQuery("Employee.findByJob_JobIdEqualsAndManager_IdNotNull", Employee.class);
+        query.setParameter("jobId","FI_MGR");
+        Employee results = (Employee) query.getSingleResult();
+
+
+        Employee employee = Employee.builder()
+                .phoneNumber("3471378114").email("massimocaputo@outlook.com")
+                .salary(BigDecimal.valueOf(12000))
+                .job(job)
+                .manager(results.getManager())
+                .department(results.getDepartment())
+                .hireDate(LocalDate.of(2001, 04, 15))
+                .firstName("Massimo")
+                .lastName("Caputo")
+                .build();
         log.info("Init Insert");
         try {
             transaction = entityManager.getTransaction();
@@ -260,38 +299,25 @@ public class EmployeeTest {
 
 
 
-    @Test
-    public void deleteEmployee(){
-        try{
-            //Trovo Employee
-            Employee e = entityManager.find(Employee.class, 218);
-            if(Objects.nonNull(e)){
-                transaction = entityManager.getTransaction();
-                transaction.begin();
-                entityManager.remove(e);
-                transaction.commit();
-                
-            }else{
-                log.info("Employee non trovato");
-            }
-        }catch (Exception e) {
-            log.error("Error: " + e.getMessage());
-        }finally {
-            entityManager.close();
-        }
-    }
+//    @Test
+//    public void deleteEmployee(){
+//        try{
+//            //Trovo Employee
+//            Employee e = entityManager.find(Employee.class, 218);
+//            if(Objects.nonNull(e)){
+//                transaction = entityManager.getTransaction();
+//                transaction.begin();
+//                entityManager.remove(e);
+//                transaction.commit();
+//
+//            }else{
+//                log.info("Employee non trovato");
+//            }
+//        }catch (Exception e) {
+//            log.error("Error: " + e.getMessage());
+//        }finally {
+//            entityManager.close();
+//        }
+//    }
 
-
-    @Test
-    public void getAllRegions() {
-        try {
-            List<Region> regions = entityManager.createQuery("select r from Region r", Region.class).getResultList();
-            regions.forEach(region -> System.out.println(region.getId() + " " + region.getRegionName()));
-        }catch(NoResultException ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            entityManager.close();
-        }
-    }
 }

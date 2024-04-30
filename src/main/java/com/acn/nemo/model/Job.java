@@ -16,6 +16,9 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "JOBS")
+@NamedQueries({
+        @NamedQuery(name = "Job.findByJobIdEqualsIgnoreCase", query = "select j from Job j where upper(j.jobId) = upper(:jobId)")
+})
 public class Job implements Serializable {
     private static final long serialVersionUID = -3219834589198870889L;
     @Id

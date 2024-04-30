@@ -30,9 +30,9 @@ public class Department implements Serializable {
     @Column(name = "DEPARTMENT_NAME", nullable = false, length = 30)
     private String departmentName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MANAGER_ID")
-    private Employee manager;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MANAGER_ID")
+//    private Employee manager;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "LOCATION_ID")
