@@ -8,7 +8,9 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -122,7 +124,7 @@ public class Employee implements Serializable {
     /**
      * The Job histories.
      */
-    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = JobHistory.class)
-    private Set<JobHistory> jobHistories = new LinkedHashSet<>();
+    @OneToMany //(mappedBy = "employee")
+    private List<JobHistory> jobHistories = new ArrayList<>();
 
 }

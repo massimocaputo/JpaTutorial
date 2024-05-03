@@ -4,12 +4,13 @@ import com.acn.nemo.dto.EmployeeDto;
 import com.acn.nemo.mapper.EmployeeMapper;
 import com.acn.nemo.model.Employee;
 import com.acn.nemo.model.Job;
-import com.acn.nemo.model.Region;
+import com.acn.nemo.util.HibernateUtil;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.*;
+import javax.transaction.Transaction;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,10 +33,12 @@ public class EmployeeTest {
 
     private EntityManager entityManager;
 
-    private EntityTransaction transaction;
     private Query query;
 
     private EmployeeDto employeeDto;
+
+    //private Session session = HibernateUtil.getSessionFactory().openSession();
+    private EntityTransaction transaction;
 
     /**
      * Employee test.
@@ -61,8 +64,12 @@ public class EmployeeTest {
                 for (Employee employee : employeesList) {
                     employeeDto = EmployeeMapper.MAPPER.toDto(employee);
                     log.info("Employee: " +
-                            employeeDto.getId() + " - FirstName: " + employeeDto.getFirstName() + " - LastName: " + employeeDto.getLastName() +
-                            " - Email: " + employeeDto.getEmail() + " - PhoneNumber: " + employeeDto.getPhoneNumber() + " - Salary:" + employeeDto.getSalary() +
+                            employeeDto.getId()
+                            + " - FirstName: " + employeeDto.getFirstName()
+                            + " - LastName: " + employeeDto.getLastName() +
+                            " - Email: " + employeeDto.getEmail()
+                            + " - PhoneNumber: " + employeeDto.getPhoneNumber()
+                            + " - Salary:" + employeeDto.getSalary() +
                             " - Job: " + employeeDto.getJob().getJobTitle() +
                             " - Dept. Name: " + employeeDto.getDepartment().getDepartmentName() +
                             " - City: " + employeeDto.getDepartment().getLocation().getCity()
@@ -271,7 +278,8 @@ public class EmployeeTest {
 
 
         Employee employee = Employee.builder()
-                .phoneNumber("3471378114").email("massimocaputo@outlook.com")
+                .phoneNumber("3471378114")
+                .email("massimo.caputo@outlook.com")
                 .salary(BigDecimal.valueOf(12000))
                 .job(job)
                 .manager(results.getManager())
@@ -297,27 +305,59 @@ public class EmployeeTest {
         }
     }
 
+    @Test
+    public void updateEmployeePhone(){
+
+        try{
+
+            log.info("Init Update");
+            //transaction = session.beginTransaction();
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            log.info("Recupero Manager ID");
+            query = entityManager.createNamedQuery("Employee.findByIdEquals", Employee.class);
+            query.setParameter("id",222);
+            Employee results = (Employee) query.getSingleResult();
+
+            results.setPhoneNumber("32222111");
+           // results.setHireDate(LocalDate.of(2001, 04, 16));
+            entityManager.merge(results);
+            //entityManager.flush();
+            transaction.commit();
+            log.info("End Update");
+        }catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            log.error("Error: " + e.getMessage());
+        }finally {
+            entityManager.close();
+            factory.close();
+        }
+
+    }
 
 
-//    @Test
-//    public void deleteEmployee(){
-//        try{
-//            //Trovo Employee
-//            Employee e = entityManager.find(Employee.class, 218);
-//            if(Objects.nonNull(e)){
-//                transaction = entityManager.getTransaction();
-//                transaction.begin();
-//                entityManager.remove(e);
-//                transaction.commit();
-//
-//            }else{
-//                log.info("Employee non trovato");
-//            }
-//        }catch (Exception e) {
-//            log.error("Error: " + e.getMessage());
-//        }finally {
-//            entityManager.close();
-//        }
-//    }
+
+    @Test
+    public void deleteEmployee(){
+        try{
+            //Trovo Employee
+            Employee e = entityManager.find(Employee.class, 220);
+            if(Objects.nonNull(e)){
+                transaction = entityManager.getTransaction();
+                transaction.begin();
+                entityManager.remove(e);
+                transaction.commit();
+
+            }else{
+                log.info("Employee non trovato");
+            }
+        }catch (Exception e) {
+            log.error("Error: " + e.getMessage());
+        }finally {
+            entityManager.close();
+        }
+    }
 
 }

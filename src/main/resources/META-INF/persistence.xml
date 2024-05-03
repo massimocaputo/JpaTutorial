@@ -25,6 +25,7 @@
         <property name="use_sql_comments" value="true" />
         <property name="hibernate.generate_statistics" value="false"/>
 
+
         <property name="javax.persistence.lock.timeout" value="100"/>
         <property name="javax.persistence.query.timeout" value="100"/>
         <!--property name="hibernate.cache.use_second_level_cache" value="true"/-->

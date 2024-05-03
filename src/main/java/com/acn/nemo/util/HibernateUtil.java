@@ -1,21 +1,31 @@
 package com.acn.nemo.util;
 
-import org.hibernate.Session;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import static org.apache.logging.log4j.LogManager.getLogger;
 
 public class HibernateUtil {
+    private static final Logger log = getLogger(HibernateUtil.class);
 
-    public static SessionFactory getCurrentSessionFromJPA() {
-        // JPA and Hibernate SessionFactory example
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("walletPU");
-        EntityManager entityManager = emf.createEntityManager();
-        // Get the Hibernate Session from the EntityManager in JPA
-        Session session = entityManager.unwrap(org.hibernate.Session.class);
-        SessionFactory factory = session.getSessionFactory();
-        return factory;
+    private static final SessionFactory sessionFactory = buildSessionFactory();
+
+    private static SessionFactory buildSessionFactory() {
+        try {
+            return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+        } catch (Throwable ex) {
+            log.error("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
+    public static void shutdown() {
+        getSessionFactory().close();
     }
 }
